@@ -22,7 +22,12 @@ public class EventController {
 
     @GetMapping("/enter.do")
     public ResponseEntity<ResponseDTO> registIp(HttpServletRequest request) throws Exception {
-        ResponseDTO responseDTO = eventService.registIp(request.getRequestedSessionId(), request.getRemoteAddr(), LocalDateTime.now());
+        ResponseDTO responseDTO = eventService.registIp(
+                request.getRequestedSessionId(),
+                request.getRemoteAddr(),
+                LocalDateTime.now()
+        );
+
         return ResponseEntity.ok().body(responseDTO);
     }
 
