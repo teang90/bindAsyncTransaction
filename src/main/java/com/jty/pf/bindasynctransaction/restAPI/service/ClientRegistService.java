@@ -7,9 +7,7 @@ import com.jty.pf.bindasynctransaction.restAPI.data.IpRequestDTO;
 import com.jty.pf.bindasynctransaction.restAPI.data.IpResponseDTO;
 import com.jty.pf.bindasynctransaction.transaction.TransactionBindingManager;
 import lombok.RequiredArgsConstructor;
-import org.apache.activemq.transport.ResponseCallback;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionManager;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.CompletableFuture;
@@ -25,7 +23,7 @@ public class ClientRegistService implements EventService {
     private final TransactionBindingManager transactionBindingManager;
 
     @Override
-    public ResponseDTO registIp(String sessionId, String clientIp, LocalDateTime accessTime) throws ExecutionException, InterruptedException, TimeoutException {
+    public ResponseDTO registIp(String sessionId, String clientIp, LocalDateTime accessTime) throws Exception {
         // 1) 비동기 응답을 수신 받을 callback과 타임아웃 처리를 위한 CompletableFuture 세팅
         CompletableFuture<IpResponseDTO> outDtoCF = new CompletableFuture<>();
         ReceiveCallback receiveCallback = (txId, responseDTO) -> {

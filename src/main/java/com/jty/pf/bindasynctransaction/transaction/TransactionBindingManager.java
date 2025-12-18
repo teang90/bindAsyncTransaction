@@ -2,23 +2,20 @@ package com.jty.pf.bindasynctransaction.transaction;
 
 import com.jty.pf.bindasynctransaction.common.data.ResponseDTO;
 import com.jty.pf.bindasynctransaction.jms.ReceiveCallback;
-import com.jty.pf.bindasynctransaction.restAPI.data.IpRequestDTO;
-import com.jty.pf.bindasynctransaction.restAPI.data.IpResponseDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 
 @Slf4j
 public class TransactionBindingManager {
 
-    private final Cache cache;
+    private final CacheManager cacheManager;
 
     public TransactionBindingManager(CacheManager cacheManager) {
-        this.cache = cacheManager.getCache("txManagerCache");
+        this.cacheManager = cacheManager;
     }
 
     public void receiveMsg(String txId, ResponseDTO responseDTO) {
-        ReceiveCallback receiveCallback = cache.get(txId, ReceiveCallback.class);
+        ReceiveCallback receiveCallback = cacheManager.getCache("txManagerCache").get(txId, ReceiveCallback.class);
 
         if(receiveCallback==null){
             log.error("timeout!! {}", txId);
@@ -28,6 +25,6 @@ public class TransactionBindingManager {
     }
 
     public void addResponseCallback(String sessionId, ReceiveCallback receiveCallback) {
-        cache.put(sessionId, receiveCallback);
+        cacheManager.getCache("txManagerCache").put(sessionId, receiveCallback);
     }
 }

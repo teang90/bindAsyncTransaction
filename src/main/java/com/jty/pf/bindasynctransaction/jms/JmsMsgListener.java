@@ -18,7 +18,7 @@ public class JmsMsgListener {
 
     private final TransactionBindingManager transactionBindingManager;
 
-    @JmsListener(destination = "", containerFactory = "selectorListenerContainerFactory")
+    @JmsListener(destination = "${jms.queue.recv.evnet}", containerFactory = "selectorListenerContainerFactory")
     public void consumeQueueMsg(Message message){
         try{
             String txId = message.getStringProperty(TxCommonValue.JMS_HEADER_TX_KEY.getValue());

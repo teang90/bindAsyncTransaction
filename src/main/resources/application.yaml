@@ -1,1 +1,16 @@
+spring:
+  artemis:
+    broker-url: tcp://localhost:61616
+    user: admin
+    password: admin
+    threadPool: 10
 
+jms:
+  queue:
+    send:
+      event: ip-request
+    recv:
+      evnet: ip-response
+
+server:
+  forward-headers-strategy: native

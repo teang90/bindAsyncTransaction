@@ -7,5 +7,5 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 public interface EventService {
-    ResponseDTO registIp(String transactionId, String clientIp, LocalDateTime accessTime) throws ExecutionException, InterruptedException, TimeoutException;
+    ResponseDTO registIp(String transactionId, String clientIp, LocalDateTime accessTime) throws Exception;
 }

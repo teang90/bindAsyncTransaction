@@ -3,7 +3,7 @@ package com.jty.pf.bindasynctransaction.config;
 import com.jty.pf.bindasynctransaction.jms.JmsSender;
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.JMSException;
-import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 import org.messaginghub.pooled.jms.JmsPoolConnectionFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
@@ -18,31 +18,31 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.listener.DefaultMessageListenerContainer;
 
 import java.net.Inet4Address;
-import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 @Configuration
 public class JmsConfig {
-    @Value("")
-    private String url;
-    @Value("")
-    private String username;
-    @Value("")
-    private String password;
-    @Value("")
-    private int maxThreadPool;
 
+    @Value("${spring.artemis.broker-url}")
+    private String url;
+    @Value("${spring.artemis.user}")
+    private String username;
+    @Value("${spring.artemis.password}")
+    private String password;
+    @Value("${spring.artemis.threadPool}")
+    private int maxThreadPool;
 
     @Bean
     public ConnectionFactory connectionFactory() throws JMSException, UnknownHostException {
         ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
         connectionFactory.setBrokerURL(url);
-        connectionFactory.setUserName(username);
+        connectionFactory.setUser(username);
         connectionFactory.setPassword(password);
-        connectionFactory.setMaxThreadPoolSize(maxThreadPool);
-        connectionFactory.setClientID(Inet4Address.getLocalHost().getHostName());
+        connectionFactory.setThreadPoolMaxSize(maxThreadPool);
+//        connectionFactory.setClientID(Inet4Address.getLocalHost().getHostName().concat(LocalDateTime.now().toString()));
         return connectionFactory;
     }
 
@@ -64,7 +64,7 @@ public class JmsConfig {
         configurer.configure(factory, connectionFactory);
         factory.setConcurrency("2-10");
         factory.setReceiveTimeout(1_000L);
-
+//        factory.setClientId( Inet4Address.getLocalHost().getHostName().concat("selector"));
         return factory;
     }
 
@@ -82,8 +82,6 @@ public class JmsConfig {
 
     @Bean
     public JmsTemplate jmsTemplate(JmsPoolConnectionFactory pooledConnectionFactory) {
-//        template.setDeliveryPersistent(Boolean.FALSE);
-//        template.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
         return new JmsTemplate(pooledConnectionFactory);
     }
 
