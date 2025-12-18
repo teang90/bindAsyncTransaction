@@ -1,4 +1,4 @@
-# 비동기 트랜잭션 바인딩 시스템 구조 샘플 (Sample Structure for Async Transaction Binding)
+# 비동기 트랜잭션 바인딩 시스템 구조 샘플
 
 ## 📋 프로젝트 개요
 
