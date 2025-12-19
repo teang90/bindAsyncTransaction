@@ -1,5 +1,7 @@
 package com.jty.pf.bindasynctransaction.restAPI.data;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -10,7 +12,12 @@ public class IpRequestDTO {
     private String clientIp;
     private LocalDateTime accessTime;
 
-    private IpRequestDTO(String transactionId, String clientIp, LocalDateTime accessTime) {
+    @JsonCreator
+    private IpRequestDTO(
+            @JsonProperty("transactionId") String transactionId,
+            @JsonProperty("clientIp") String clientIp,
+            @JsonProperty("accessTime")LocalDateTime accessTime
+    ) {
         this.transactionId = transactionId;
         this.clientIp = clientIp;
         this.accessTime = accessTime;

@@ -5,12 +5,14 @@ import jakarta.jms.ConnectionFactory;
 import jakarta.jms.JMSException;
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 import org.messaginghub.pooled.jms.JmsPoolConnectionFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
 import org.springframework.boot.autoconfigure.jms.JmsPoolConnectionFactoryFactory;
 import org.springframework.boot.autoconfigure.jms.JmsPoolConnectionFactoryProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.config.JmsListenerEndpoint;
@@ -45,6 +47,21 @@ public class JmsConfig {
 //        connectionFactory.setClientID(Inet4Address.getLocalHost().getHostName().concat(LocalDateTime.now().toString()));
         return connectionFactory;
     }
+
+    @Bean
+    @Qualifier("jmsListenerContainerFactory")
+    public JmsListenerContainerFactory<?> jmsListenerContainerFactory(
+            ConnectionFactory connectionFactory,
+            DefaultJmsListenerContainerFactoryConfigurer configurer
+    ) {
+        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+        configurer.configure(factory, connectionFactory);
+//        factory.setTaskExecutor(); -> 멀티 threadpool
+        factory.setConcurrency("2-5");
+        factory.setConnectionFactory(connectionFactory);
+        return factory;
+    }
+
 
     @Bean
     public JmsListenerContainerFactory<?> selectorListenerContainerFactory(

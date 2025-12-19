@@ -17,7 +17,9 @@ public class JmsSender {
 
     public void send(IpRequestDTO ipReqDTO) throws Exception {
         MessagePostProcessor  messagePostProcessor = message -> {
-            message.setObjectProperty(TxCommonValue.JMS_HEADER_TX_KEY.getValue(), ipReqDTO.getTransactionId()) ;
+            message.setObjectProperty(
+                    TxCommonValue.JMS_HEADER_TX_KEY.getValue(), ipReqDTO.getTransactionId()
+            );
             return message;
         };
 

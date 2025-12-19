@@ -7,6 +7,7 @@ import com.jty.pf.bindasynctransaction.restAPI.data.IpRequestDTO;
 import com.jty.pf.bindasynctransaction.restAPI.data.IpResponseDTO;
 import com.jty.pf.bindasynctransaction.transaction.TransactionBindingManager;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ClientRegistService implements EventService {
 
@@ -41,7 +43,15 @@ public class ClientRegistService implements EventService {
         // 3) core 모듈로 biz 요청
         jmsSender.send( IpRequestDTO.of(sessionId, clientIp, accessTime) );
 
-        return outDtoCF.get(3L, TimeUnit.SECONDS);
+        IpResponseDTO ipResponseDTO = null;
+        try{
+            ipResponseDTO = outDtoCF.get(3L, TimeUnit.SECONDS);
+        }catch (TimeoutException e){
+            log.error("timeout!! {}", sessionId);
+            ipResponseDTO = IpResponseDTO.timeout(sessionId);
+        }
+
+        return ipResponseDTO;
     }
 
 }
