@@ -15,11 +15,6 @@ public class IpResponseDTO extends ResponseDTO {
     private ResultCode resultCode = ResultCode.SERVER_ERROR;
     private Long waitingNumber;
 
-//    private IpResponseDTO(String transactionId, ResultCode resultCode, Long waitingNumber) {
-//        this.transactionId = transactionId;
-//        this.resultCode = resultCode;
-//    }
-
     @JsonCreator
     private IpResponseDTO(
             @JsonProperty("transactionId") String transactionId,
@@ -30,7 +25,6 @@ public class IpResponseDTO extends ResponseDTO {
         this.resultCode = resultCode;
         this.waitingNumber = waitingNumber;
     }
-
 
     public static IpResponseDTO from(String transactionId, ResultCode resultCode,  Long waitingNumber) {
         return new IpResponseDTO(transactionId, resultCode, waitingNumber);
@@ -43,5 +37,6 @@ public class IpResponseDTO extends ResponseDTO {
     public static IpResponseDTO timeout(String transactionId){
         return new IpResponseDTO(transactionId, ResultCode.SERVER_ERROR, -1L);
     }
+
 
 }

@@ -1,11 +1,11 @@
 spring:
   artemis:
-#    broker-url: tcp://localhost:61616
-#    user: admin
-#    password: admin
-    broker-url: tcp://211.236.39.250:46161
-    user: onelbs
-    password: onelbs
+    broker-url: tcp://localhost:61616
+    user: admin
+    password: admin
+#    broker-url: tcp://211.236.39.250:46161
+#    user: onelbs
+#    password: onelbs
     threadPool: 10
 
 jms:
